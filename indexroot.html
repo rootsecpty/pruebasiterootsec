@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ROOTSEC | Ciberseguridad</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:#000;
+      color:#fff;
+      overflow-x:hidden;
+      font-family:'Orbitron',sans-serif;
+    }
+
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+
+      background:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+      background-size:40px 40px;
+
+      z-index:-2;
+    }
+
+    body::after{
+      content:'';
+      position:fixed;
+      inset:0;
+
+      background:
+      radial-gradient(circle at center, rgba(255,255,255,0.06), transparent 60%);
+
+      z-index:-1;
+    }
+
+    header{
+      position:fixed;
+      top:0;
+      width:100%;
+      height:82px;
+
+      padding:0 7%;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+
+      background:rgba(0,0,0,0.78);
+
+      backdrop-filter:blur(12px);
+
+      border-bottom:1px solid rgba(255,255,255,0.08);
+
+      z-index:999;
+    }
+
+    .logo{
+      position:relative;
+      width:220px;
+      height:70px;
+    }
+
+    .logo-icon{
+      position:absolute;
+
+      top:-58px;
+      left:0;
+
+      width:220px;
+      height:220px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      transition:0.4s;
+
+      z-index:1000;
+    }
+
+    .logo-icon img{
+      width:100%;
+      height:auto;
+      object-fit:contain;
+
+      filter:
+      drop-shadow(0 0 12px rgba(255,255,255,0.30))
+      drop-shadow(0 0 30px rgba(255,255,255,0.18));
+
+      transition:0.4s;
+    }
+
+    .logo-icon:hover{
+      transform:scale(1.05);
+    }
+
+    .logo-icon:hover img{
+      filter:
+      drop-shadow(0 0 18px rgba(255,255,255,0.50))
+      drop-shadow(0 0 45px rgba(255,255,255,0.28));
+    }
+
+    nav{
+      display:flex;
+      gap:40px;
+    }
+
+    nav a{
+      text-decoration:none;
+      color:rgba(255,255,255,0.7);
+      transition:0.3s;
+      font-size:14px;
+      letter-spacing:2px;
+    }
+
+    nav a:hover{
+      color:#fff;
+      text-shadow:0 0 10px #fff;
+    }
+
+    .btn{
+      padding:14px 26px;
+
+      background:#fff;
+      color:#000;
+
+      border:none;
+      border-radius:12px;
+
+      font-weight:700;
+      cursor:pointer;
+
+      transition:0.3s;
+
+      font-family:'Orbitron',sans-serif;
+    }
+
+    .btn:hover{
+      transform:translateY(-3px);
+
+      box-shadow:0 0 25px rgba(255,255,255,0.35);
+    }
+
+    .hero{
+      min-height:100vh;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      gap:80px;
+
+      padding:190px 7% 100px;
+    }
+
+    .hero-left{
+      flex:1;
+    }
+
+    .tag{
+      display:inline-block;
+
+      padding:10px 18px;
+
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:999px;
+
+      background:rgba(255,255,255,0.03);
+
+      color:rgba(255,255,255,0.7);
+
+      font-size:13px;
+      letter-spacing:2px;
+
+      margin-bottom:30px;
+
+      font-family:'Share Tech Mono', monospace;
+    }
+
+    .hero-left h2{
+      font-size:78px;
+      line-height:1.05;
+
+      margin-bottom:30px;
+
+      text-transform:uppercase;
+    }
+
+    .hero-left h2 span{
+      color:rgba(255,255,255,0.3);
+      display:block;
+    }
+
+    .hero-left p{
+      color:rgba(255,255,255,0.6);
+
+      line-height:1.9;
+
+      max-width:750px;
+
+      margin-bottom:45px;
+
+      font-size:18px;
+
+      font-family:'Share Tech Mono', monospace;
+    }
+
+    .hero-buttons{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .btn-outline{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.15);
+      color:#fff;
+    }
+
+    .hero-right{
+      flex:1;
+      position:relative;
+    }
+
+    .terminal{
+      background:#050505;
+
+      border:1px solid rgba(255,255,255,0.08);
+
+      border-radius:24px;
+
+      padding:35px;
+
+      box-shadow:
+      0 0 60px rgba(255,255,255,0.08),
+      inset 0 0 40px rgba(255,255,255,0.02);
+
+      position:relative;
+
+      overflow:hidden;
+    }
+
+    .terminal::before{
+      content:'';
+
+      position:absolute;
+      inset:0;
+
+      background:
+      linear-gradient(
+      transparent,
+      rgba(255,255,255,0.03),
+      transparent
+      );
+
+      animation:scan 5s linear infinite;
+    }
+
+    @keyframes scan{
+      0%{
+        transform:translateY(-100%);
+      }
+
+      100%{
+        transform:translateY(100%);
+      }
+    }
+
+    .terminal-header{
+      display:flex;
+      gap:10px;
+
+      margin-bottom:30px;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+
+      border-radius:50%;
+
+      background:#fff;
+
+      opacity:0.5;
+    }
+
+    .line{
+      font-family:'Share Tech Mono', monospace;
+
+      color:#d7d7d7;
+
+      margin-bottom:18px;
+
+      font-size:15px;
+    }
+
+    .line span{
+      color:#888;
+    }
+
+    section{
+      padding:120px 7%;
+    }
+
+    .section-title{
+      margin-bottom:70px;
+    }
+
+    .section-title p{
+      color:rgba(255,255,255,0.45);
+
+      letter-spacing:5px;
+
+      margin-bottom:15px;
+
+      font-size:13px;
+
+      font-family:'Share Tech Mono', monospace;
+    }
+
+    .section-title h2{
+      font-size:60px;
+
+      max-width:900px;
+
+      text-transform:uppercase;
+
+      line-height:1.1;
+    }
+
+    .cards{
+      display:grid;
+
+      grid-template-columns:
+      repeat(auto-fit,minmax(320px,1fr));
+
+      gap:35px;
+    }
+
+    .card{
+      background:#050505;
+
+      border:1px solid rgba(255,255,255,0.08);
+
+      padding:40px;
+
+      border-radius:28px;
+
+      transition:0.4s;
+
+      position:relative;
+
+      overflow:hidden;
+
+      min-height:260px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+    }
+
+    .card::before{
+      content:'';
+
+      position:absolute;
+
+      top:0;
+      left:-100%;
+
+      width:100%;
+      height:1px;
+
+      background:#fff;
+
+      transition:0.6s;
+    }
+
+    .card:hover::before{
+      left:100%;
+    }
+
+    .card:hover{
+      transform:translateY(-12px);
+
+      box-shadow:0 0 40px rgba(255,255,255,0.08);
+    }
+
+    .card h3{
+      margin-bottom:22px;
+
+      font-size:30px;
+
+      line-height:1.2;
+    }
+
+    .card p{
+      color:rgba(255,255,255,0.55);
+
+      line-height:2;
+
+      font-size:15px;
+
+      font-family:'Share Tech Mono', monospace;
+    }
+
+    .cta{
+      text-align:center;
+
+      background:#050505;
+
+      border:1px solid rgba(255,255,255,0.08);
+
+      padding:90px 40px;
+
+      border-radius:40px;
+
+      position:relative;
+
+      overflow:hidden;
+    }
+
+    .cta::before{
+      content:'';
+
+      position:absolute;
+
+      width:500px;
+      height:500px;
+
+      background:
+      radial-gradient(circle,
+      rgba(255,255,255,0.08),
+      transparent 70%);
+
+      top:-200px;
+
+      left:50%;
+
+      transform:translateX(-50%);
+    }
+
+    .cta h2{
+      font-size:64px;
+
+      line-height:1.1;
+
+      margin-bottom:30px;
+
+      text-transform:uppercase;
+
+      position:relative;
+    }
+
+    .cta h2 span{
+      display:block;
+      color:rgba(255,255,255,0.35);
+    }
+
+    .cta p{
+      max-width:800px;
+
+      margin:auto;
+
+      color:rgba(255,255,255,0.6);
+
+      line-height:1.9;
+
+      margin-bottom:45px;
+
+      font-family:'Share Tech Mono', monospace;
+
+      position:relative;
+    }
+
+    footer{
+      padding:40px 7%;
+
+      border-top:1px solid rgba(255,255,255,0.08);
+
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+
+      gap:20px;
+
+      color:rgba(255,255,255,0.4);
+
+      font-family:'Share Tech Mono', monospace;
+    }
+
+    footer a{
+      color:rgba(255,255,255,0.5);
+
+      text-decoration:none;
+
+      margin-left:20px;
+    }
+
+    .whatsapp-float{
+      position:fixed;
+
+      bottom:28px;
+      right:28px;
+
+      width:72px;
+      height:72px;
+
+      border-radius:50%;
+
+      background:#25D366;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      text-decoration:none;
+
+      color:#fff;
+
+      font-size:34px;
+
+      z-index:99999;
+
+      box-shadow:
+      0 0 20px rgba(37,211,102,0.55),
+      0 0 45px rgba(37,211,102,0.25);
+
+      transition:0.35s ease;
+    }
+
+    .whatsapp-float:hover{
+      transform:scale(1.12);
+
+      box-shadow:
+      0 0 30px rgba(37,211,102,0.75),
+      0 0 65px rgba(37,211,102,0.35);
+    }
+
+    .whatsapp-float::before{
+      content:'';
+
+      position:absolute;
+
+      width:100%;
+      height:100%;
+
+      border-radius:50%;
+
+      border:2px solid rgba(37,211,102,0.45);
+
+      animation:pulse 2s infinite;
+    }
+
+    @keyframes pulse{
+
+      0%{
+        transform:scale(1);
+        opacity:1;
+      }
+
+      100%{
+        transform:scale(1.6);
+        opacity:0;
+      }
+
+    }
+
+    @media(max-width:1100px){
+
+      .hero{
+        flex-direction:column;
+      }
+
+      .hero-left h2,
+      .section-title h2,
+      .cta h2{
+        font-size:50px;
+      }
+
+    }
+
+    @media(max-width:850px){
+
+      nav{
+        display:none;
+      }
+
+      .hero-left h2,
+      .section-title h2,
+      .cta h2{
+        font-size:38px;
+      }
+
+      .logo{
+        width:140px;
+      }
+
+      .logo-icon{
+        width:150px;
+        height:150px;
+        top:-35px;
+      }
+
+      .whatsapp-float{
+        width:62px;
+        height:62px;
+
+        font-size:28px;
+
+        bottom:20px;
+        right:20px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+
+    <div class="logo-icon">
+      <img src="img/logo.png" alt="RootSec Logo">
+    </div>
+
+  </div>
+
+  <nav>
+    <a href="#services">SERVICIOS</a>
+    <a href="#contact">CONTACTO</a>
+  </nav>
+
+  <button class="btn">CONTACTAR</button>
+
+</header>
+
+<section class="hero">
+
+  <div class="hero-left">
+
+    <div class="tag">
+      ACCESO ROOT AUTORIZADO
+    </div>
+
+    <h2>
+      CIBERSEGURIDAD
+      <span>SIN LÍMITES</span>
+    </h2>
+
+    <p>
+      RootSec desarrolla soluciones avanzadas de ciberseguridad,
+      administración de servidores, redes empresariales,
+      hacking ético, automatización, programación
+      y soporte técnico profesional.
+    </p>
+
+    <div class="hero-buttons">
+
+      <button class="btn">
+        EXPLORAR
+      </button>
+
+      <button class="btn btn-outline">
+        SERVICIOS
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="hero-right">
+
+    <div class="terminal">
+
+      <div class="terminal-header">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        iniciando protocolos de seguridad...
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        estado del firewall ............. ACTIVO
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        detección de intrusos ........... HABILITADO
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        monitoreo de red ................. EN LÍNEA
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        servidores linux ................. PROTEGIDOS
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        módulos pentesting ............... LISTOS
+      </div>
+
+      <div class="line">
+        <span>root@rootsec:~$</span>
+        estado ........................... ACCESO ROOT
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section id="services">
+
+  <div class="section-title">
+
+    <p>SERVICIOS ROOTSEC</p>
+
+    <h2>
+      DEFENSA DIGITAL E INFRAESTRUCTURA
+    </h2>
+
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>CIBERSEGURIDAD</h3>
+
+      <p>
+        Auditorías, hardening,
+        análisis de vulnerabilidades,
+        monitoreo y protección avanzada
+        para infraestructuras digitales.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>PENTESTING</h3>
+
+      <p>
+        Simulación de ataques,
+        hacking ético y pruebas
+        de penetración orientadas
+        a entornos empresariales.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>REDES</h3>
+
+      <p>
+        Configuración y administración
+        de switches, routers,
+        firewalls y puntos de acceso
+        empresariales.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>SERVIDORES</h3>
+
+      <p>
+        Administración Linux y Windows Server,
+        virtualización y optimización
+        de servicios corporativos.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>PROGRAMACIÓN</h3>
+
+      <p>
+        Desarrollo web, automatización,
+        scripting y soluciones tecnológicas
+        adaptadas a cada necesidad.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>ROBÓTICA</h3>
+
+      <p>
+        Sistemas inteligentes,
+        automatización e integración
+        tecnológica avanzada.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>TUTORÍAS</h3>
+
+      <p>
+        Asesorías personalizadas
+        en ciberseguridad, redes,
+        programación y sistemas.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>CAPACITACIONES</h3>
+
+      <p>
+        Formación técnica profesional
+        para estudiantes, empresas
+        y equipos tecnológicos.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<section id="contact">
+
+  <div class="cta">
+
+    <h2>
+      SEGURIDAD
+      <span>A NIVEL ROOT</span>
+    </h2>
+
+    <p>
+      Seguridad avanzada,
+      infraestructura moderna
+      y tecnología profesional
+      para empresas y proyectos digitales.
+    </p>
+
+    <div class="hero-buttons" style="justify-content:center;">
+
+      <button class="btn">
+        CONTACTAR
+      </button>
+
+      <button class="btn btn-outline">
+        SOLICITAR SERVICIO
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+
+  <p>
+    © 2026 ROOTSEC // TODOS LOS DERECHOS RESERVADOS
+  </p>
+
+  <div>
+    <a href="#">INSTAGRAM</a>
+    <a href="#">GITHUB</a>
+    <a href="#">LINKEDIN</a>
+  </div>
+
+</footer>
+
+<a
+  href="https://wa.me/50761234567"
+  class="whatsapp-float"
+  target="_blank"
+>
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+
+const lines = document.querySelectorAll('.line');
+
+lines.forEach((line,index)=>{
+
+  line.style.opacity = '0';
+  line.style.transform = 'translateY(10px)';
+
+  setTimeout(()=>{
+
+    line.style.transition = '0.5s';
+
+    line.style.opacity = '1';
+
+    line.style.transform = 'translateY(0px)';
+
+  },index*300)
+
+})
+
+</script>
+
+</body>
+</html>
